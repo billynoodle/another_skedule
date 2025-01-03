@@ -1,5 +1,5 @@
 import os
-from autogen import AssistantAgent, UserProxyAgent, config_list, GroupChat, GroupChatManager
+from autogen import AssistantAgent, UserProxyAgent, GroupChat, GroupChatManager
 from autogen.agentchat.contrib.agent_builder import AgentBuilder
 from dotenv import load_dotenv
 
@@ -7,15 +7,17 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Configuration for the agents
-config_list = [{
-    'model': 'claude-3-5-sonnet-20241022',
-    'api_key': os.getenv('ANTHROPIC_API_KEY')
-}]
+llm_config = {
+    'config_list': [{
+        'model': 'claude-3-5-sonnet-20241022',
+        'api_key': os.getenv('ANTHROPIC_API_KEY')
+    }]
+}
 
 # Create specialized agents for your tech stack
 project_manager = AssistantAgent(
     name="project_manager",
-    llm_config={"config_list": config_list},
+    llm_config=llm_config,
     system_message="""You are a project manager specialized in React/TypeScript applications with expertise in:
     1. Construction plan viewing applications
     2. PDF handling and manipulation with react-pdf and fabric.js
@@ -34,7 +36,7 @@ project_manager = AssistantAgent(
 
 react_specialist = AssistantAgent(
     name="react_specialist",
-    llm_config={"config_list": config_list},
+    llm_config=llm_config,
     system_message="""You are a React/TypeScript specialist who:
     1. Creates reusable React components
     2. Implements PDF viewing with react-pdf
@@ -47,7 +49,7 @@ react_specialist = AssistantAgent(
 
 supabase_specialist = AssistantAgent(
     name="supabase_specialist",
-    llm_config={"config_list": config_list},
+    llm_config=llm_config,
     system_message="""You are a Supabase specialist who:
     1. Designs efficient database schemas
     2. Implements user authentication
@@ -60,7 +62,7 @@ supabase_specialist = AssistantAgent(
 
 ui_specialist = AssistantAgent(
     name="ui_specialist",
-    llm_config={"config_list": config_list},
+    llm_config=llm_config,
     system_message="""You are a UI/UX specialist who:
     1. Creates responsive layouts with Tailwind CSS
     2. Designs intuitive PDF viewing interfaces
