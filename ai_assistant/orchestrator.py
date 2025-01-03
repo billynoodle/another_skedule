@@ -31,6 +31,8 @@ project_manager = AssistantAgent(
     3. Coordinate between different specialists
     4. Provide clear, non-technical updates
     5. Ensure best practices in React/TypeScript development
+    
+    Focus on concrete, actionable insights. Avoid meta-discussions about being an AI. End your response when the technical discussion is complete.
     """
 )
 
@@ -44,6 +46,9 @@ react_specialist = AssistantAgent(
     4. Manages complex state with Zustand
     5. Implements drag-and-drop with @dnd-kit/core
     6. Follows TypeScript best practices
+    
+    Focus on technical implementation details and code architecture. Avoid meta-discussions about being an AI.
+    If the technical discussion is complete, end your response with 'DISCUSSION_COMPLETE'.
     """
 )
 
@@ -57,6 +62,9 @@ supabase_specialist = AssistantAgent(
     4. Sets up real-time subscriptions
     5. Manages PDF file storage
     6. Handles concurrent annotations
+    
+    Focus on database design, queries, and real-time features. Avoid meta-discussions about being an AI.
+    If the technical discussion is complete, end your response with 'DISCUSSION_COMPLETE'.
     """
 )
 
@@ -69,6 +77,9 @@ ui_specialist = AssistantAgent(
     3. Implements accessible annotation tools
     4. Optimizes for different screen sizes
     5. Creates smooth zoom/pan experiences
+    
+    Focus on user interface design and implementation details. Avoid meta-discussions about being an AI.
+    If the technical discussion is complete, end your response with 'DISCUSSION_COMPLETE'.
     """
 )
 
@@ -76,7 +87,9 @@ ui_specialist = AssistantAgent(
 user_proxy = UserProxyAgent(
     name="user_proxy",
     human_input_mode="TERMINATE",
-    max_consecutive_auto_reply=10
+    max_consecutive_auto_reply=10,
+    system_message="""Your role is to initiate and oversee technical discussions.
+    End the conversation when you see 'DISCUSSION_COMPLETE' or when the technical discussion naturally concludes."""
 )
 
 def discuss_feature(feature_description):
@@ -86,7 +99,7 @@ def discuss_feature(feature_description):
         groupchat = GroupChat(
             agents=[project_manager, react_specialist, supabase_specialist, ui_specialist],
             messages=[],
-            max_round=20
+            max_round=8  # Limit the number of rounds to avoid endless discussions
         )
         
         manager = GroupChatManager(groupchat=groupchat)
@@ -104,6 +117,8 @@ def discuss_feature(feature_description):
             4. UI/UX considerations
             5. Implementation steps
             6. Potential challenges
+            
+            End the discussion when all key points have been addressed.
             """
         )
     except Exception as e:
@@ -144,7 +159,7 @@ def design_component(component_description):
         groupchat = GroupChat(
             agents=[react_specialist, ui_specialist],
             messages=[],
-            max_round=15
+            max_round=6  # Limit rounds for focused component design
         )
         
         manager = GroupChatManager(groupchat=groupchat)
@@ -160,6 +175,8 @@ def design_component(component_description):
             3. State management approach
             4. UI/UX considerations
             5. Example implementation
+            
+            End the discussion when the design is complete.
             """
         )
     except Exception as e:
