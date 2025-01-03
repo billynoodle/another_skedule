@@ -8,7 +8,7 @@ load_dotenv()
 
 # Configuration for the agents
 config_list = [{
-    'model': 'gpt-4',
+    'model': 'claude-3-5-sonnet-20241022',
     'api_key': os.getenv('ANTHROPIC_API_KEY')
 }]
 
